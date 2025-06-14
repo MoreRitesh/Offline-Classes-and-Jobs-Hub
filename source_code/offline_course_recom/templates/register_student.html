@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Registration</title>
+    
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #aeaeb3, #5f5f62, #747373);
+        }
+
+        .container-box {
+            width: 900px;
+            height: auto;
+            display: flex;
+            border-radius: 20px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Left Section - Image */
+        .left-section {
+            width: 40%;
+            background: url('https://img.freepik.com/free-vector/confirmed-concept-illustration_114360-496.jpg?uid=R186175921&ga=GA1.1.1412707115.1738820927&semt=ais_hybrid') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            text-align: center;
+        }
+
+        /* Dark overlay without blur */
+        .left-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4); /* Dark overlay without blur */
+            border-radius: 20px 0 0 20px;
+        }
+
+        .left-section h2, .left-section p {
+            position: relative;
+            color: white;
+            z-index: 2;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Right Section - Form */
+        .right-section {
+            width: 60%;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(251, 251, 251, 0.85);
+            border-radius: 0 20px 20px 0;
+        }
+
+        .right-section h2 {
+            color: #444;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: inset 0px 4px 8px rgba(255, 255, 255, 0.1);
+            transition: 0.3s ease-in-out;
+        }
+
+        .input-group:focus-within {
+            border-color: #444;
+            box-shadow: 0px 5px 15px rgba(67, 67, 68, 0.3);
+        }
+
+        .input-group i {
+            margin-right: 12px;
+            color: black;
+            font-size: 16px;
+        }
+
+        .input-group input, .input-group select {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 16px;
+            color: rgb(36, 35, 35);
+        }
+
+        .register-btn {
+            background: linear-gradient(90deg, #4f6b5e, #233b31);
+            color: white;
+            font-weight: bold;
+            padding: 12px;
+            border: none;
+            width: 100%;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s ease-in-out;
+            box-shadow: 0px 5px 15px rgba(78, 78, 78, 0.4);
+        }
+
+        .register-btn:hover {
+            background: linear-gradient(90deg, #2c3e50, #1a2f27);
+            box-shadow: 0px 8px 20px rgba(73, 73, 74, 0.6);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 900px) {
+            .container-box {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .left-section {
+                width: 100%;
+                height: 250px;
+            }
+
+            .right-section {
+                width: 100%;
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container-box">
+        <!-- Left Section (Image) -->
+        <div class="left-section">
+            <h2>Join Us Today!</h2>
+            <p>Register to explore new learning opportunities.</p>
+        </div>
+
+        <!-- Right Section (Form) -->
+        <div class="right-section">
+            <h2>Create Account</h2>
+            
+            <form method="POST">
+                <div class="input-group">
+                    <i class="fa fa-user"></i>
+                    <input type="text" name="name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" name="email" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                
+                <!-- Skills Section -->
+                <div class="form-group">
+                    <label style="color: rgb(49, 48, 48);"><i class="fas fa-code"></i> Skills</label>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="skills" value="Python">
+                        <label class="form-check-label text-black">Python</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="skills" value="Java">
+                        <label class="form-check-label text-black">Java</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" name="skills" value="C++">
+                        <label class="form-check-label text-black">C++</label>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <i class="fa fa-lightbulb"></i>
+                    <input type="text" name="interest_area" placeholder="Area of Interest (e.g., AI, Cybersecurity)">
+                </div>
+
+                <button type="submit" class="register-btn">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

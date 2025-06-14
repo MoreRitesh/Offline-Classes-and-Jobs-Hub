@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Student Dashboard</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #343a40;
+            padding: 15px;
+        }
+
+        .dashboard-header i {
+            color: #007bff;
+        }
+
+        .course-card {
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .course-card:hover {
+            transform: scale(1.02);
+        }
+
+        .course-card h5 {
+            font-weight: bold;
+            color: #212529;
+        }
+
+        .course-card p {
+            font-size: 14px;
+            color: #555;
+        }
+
+        .btn-custom {
+            background: linear-gradient(90deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .btn-custom:hover {
+            background: linear-gradient(90deg, #0056b3, #003d82);
+        }
+
+        .logout-btn {
+            background: #dc3545;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            background: #a71d2a;
+        }
+
+        .match-badge {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: white;
+            display: inline-block;
+        }
+
+        .high-match { background-color: #28a745; }
+        .medium-match { background-color: #ffc107; color: black; }
+        .low-match { background-color: #dc3545; }
+        .very-low-match { background-color: #6c757d; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2 class="dashboard-header"><i class="fas fa-user-graduate"></i> Student Dashboard</h2>
+
+        <!-- My Enrolled Courses Button -->
+        <div class="text-center">
+            <a href="{{ url_for('my_enrolled_courses') }}" class="btn btn-warning">
+                <i class="fas fa-book-open"></i> My Enrolled Courses
+            </a>
+        </div>
+
+        <!-- Recommended Courses Section -->
+        <h3 class="mt-4 text-primary"><i class="fas fa-lightbulb"></i> Recommended Courses</h3>
+        {% if recommended_courses %}
+        <div class="row">
+            {% for item in recommended_courses %}
+            <div class="col-md-4">
+                <div class="course-card">
+                    <h5>{{ item.course.name }}</h5>
+                    <p>{{ item.course.description }} ({{ item.course.duration }})</p>
+                    <p><strong>Institute:</strong> {{ item.course.institute.name }}</p>
+                    <p><strong>Skills Covered:</strong> {{ item.course.skills_covered }}</p>
+                    
+                    <!-- Match Percentage with Badge -->
+                    <p><strong>Match Percentage:</strong>
+                        {% if item.score is not none %}
+                            {% set match = item.score %}
+                            {% if match > 75 %}
+                                <span class="match-badge high-match">{{ match | round(2) }}% (High Match)</span>
+                            {% elif match > 50 %}
+                                <span class="match-badge medium-match">{{ match | round(2) }}% (Medium Match)</span>
+                            {% elif match > 25 %}
+                                <span class="match-badge low-match">{{ match | round(2) }}% (Low Match)</span>
+                            {% else %}
+                                <span class="match-badge very-low-match">{{ match | round(2) }}% (Very Low Match)</span>
+                            {% endif %}
+                        {% else %}
+                            <span class="match-badge very-low-match">Not Available</span>
+                        {% endif %}
+                    </p>
+                    
+                    <!-- Enroll Button -->
+                    {% if item.course.id in enrolled_course_ids %}
+                        <button class="btn btn-secondary w-100" disabled>
+                            <i class="fas fa-check-circle"></i> Already Enrolled
+                        </button>
+                    {% else %}
+                        <a href="{{ url_for('enroll', course_id=item.course.id) }}" class="btn-custom w-100">Enroll Now</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+            <p class="text-center">No recommended courses based on your skills & interests.</p>
+        {% endif %}
+
+        <!-- Other Courses Section -->
+        <h3 class="mt-4 text-primary"><i class="fas fa-book"></i> Other Courses</h3>
+        <div class="row">
+            {% for item in other_courses %}
+            <div class="col-md-4">
+                <div class="course-card">
+                    <h5>{{ item.course.name }}</h5>
+                    <p>{{ item.course.description }} ({{ item.course.duration }})</p>
+                    <p><strong>Institute:</strong> {{ item.course.institute.name }}</p>
+                    <p><strong>Skills Covered:</strong> {{ item.course.skills_covered }}</p>
+
+                    {% if item.course.id in enrolled_course_ids %}
+                        <button class="btn btn-secondary w-100" disabled>Already Enrolled</button>
+                    {% else %}
+                        <a href="{{ url_for('enroll', course_id=item.course.id) }}" class="btn-custom w-100">Enroll Now</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Logout Button -->
+        <a href="{{ url_for('logout') }}" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
